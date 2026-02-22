@@ -82,6 +82,11 @@ the bcg bandpass is 0.8-3hz and bpm is estimated via autocorrelation on the filt
 - use at your own risk
 - not for medical use
 
+## does not work on
+
+- intel macbooks (pre-m1)
+- m1 macbook air/pro (2020) 
+
 ## license
 
 MIT
