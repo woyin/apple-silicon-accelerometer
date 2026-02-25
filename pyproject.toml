@@ -11,7 +11,6 @@ classifiers = [
     "Operating System :: MacOS",
     "Programming Language :: Python :: 3",
     "Topic :: System :: Hardware",
-    "License :: OSI Approved :: MIT License",
 ]
 
 [project.urls]
