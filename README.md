@@ -1,6 +1,8 @@
 # apple-silicon-accelerometer
 
-more information: [read the article on Medium](https://medium.com/@oli.bourbonnais/your-macbook-has-an-accelerometer-and-you-can-read-it-in-real-time-in-python-28d9395fb180)
+reads the undocumented internal accelerometer + gyroscope on apple silicon macbook pros via iokit hid (spu / AppleSPUHIDDevice),  lid angle and ambient light. 
+
+more information: [read the article](https://medium.com/@oli.bourbonnais/your-macbook-has-an-accelerometer-and-you-can-read-it-in-real-time-in-python-28d9395fb180)
 
 it turns out modern macbook pros have an undocumented mems accelerometer + gyroscope managed by the sensor processing unit (spu).
 this project reads both via iokit hid, along with lid angle and ambient light sensors from the same interface
@@ -27,11 +29,11 @@ also supports `imu.read_lid()` and `imu.read_als()` -- see `macimu/__init__.py` 
 
 ## what is this
 
-apple silicon chips (M1/M2/M3/M4/M5) have a hard to find mems IMU (accelerometer + gyroscope) managed by the sensor processing unit (SPU).
+apple silicon macbooks appear to expose a hard to find  mems imu (accelerometer + gyroscope) managed by the sensor processing unit (spu).
 it's not exposed through any public api or framework.
-this project reads raw 3-axis acceleration and angular velocity data at ~800hz via iokit hid callbacks.
+this project reads raw 3-axis acceleration (accelerometer) and 3-axis angular velocity (gyroscope) data via iokit hid callbacks.
 
-only tested on macbook pro m3 pro so far - might work on other apple silicon macs but no guarantees
+only tested on macbook pro m3 so far 
 
 ## how it works
 
@@ -99,10 +101,10 @@ the bcg bandpass is 0.8-3hz and bpm is estimated via autocorrelation on the filt
 - use at your own risk
 - not for medical use
 
-## tested on
+## does not work on
 
-- macbook pro m3 pro, macos 15.6.1
-- python 3.14
+- intel macbooks (pre-m1)
+- m1 macbook air/pro (2020) 
 
 ## license
 
