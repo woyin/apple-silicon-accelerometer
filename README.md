@@ -27,7 +27,7 @@ also supports `imu.read_lid()` and `imu.read_als()` see `macimu/__init__.py` for
 
 ## what is this
 
-apple silicon chips (M1/M2/M3/M4/M5) have a hard to find mems IMU (accelerometer + gyroscope) managed by the sensor processing unit (SPU).
+apple silicon chips (M2/M3/M4/M5) have a hard to find mems IMU (accelerometer + gyroscope) managed by the sensor processing unit (SPU).
 it's not exposed through any public api or framework.
 this project reads raw 3-axis acceleration and angular velocity data at ~800hz via iokit hid callbacks.
 
