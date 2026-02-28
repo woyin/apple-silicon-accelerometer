@@ -88,19 +88,21 @@ IMU(decimation=1)     # ~800 hz (full native rate)
 IMU(decimation=8)     # ~100 hz (default)
 ```
 
-### signal processing
+### signal processing (zero-dependency biquad butterworth filters)
 
 ```python
 from macimu import IMU
-from macimu.filters import magnitude, remove_gravity, high_pass, low_pass
+from macimu.filters import magnitude, remove_gravity, high_pass, low_pass, peak_detect
 
 if __name__ == '__main__':
     with IMU() as imu:
         samples = imu.read_accel()
         m = magnitude(samples[0].x, samples[0].y, samples[0].z)
-        dynamic = remove_gravity(samples)       # subtract gravity estimate
-        smooth = low_pass(samples, 5.0, 100.0)  # 5 hz cutoff, 100 hz rate
-        taps = high_pass(samples, 10.0, 100.0)  # isolate sharp impacts
+        dynamic = remove_gravity(samples)               # kalman filter gravity removal
+        smooth = low_pass(samples, 5.0, 100.0)          # 2nd-order butterworth
+        taps = high_pass(samples, 10.0, 100.0, order=4) # 4th-order, -24 dB/oct
+        mags = [magnitude(s.x, s.y, s.z) for s in samples]
+        hits = peak_detect(mags, threshold=1.2)          # detect impacts
 ```
 
 ### mock mode (no root needed, for development / testing)
@@ -185,15 +187,20 @@ if __name__ == '__main__':
 | `imu.effective_sample_rate` | measured hz (or `None` if not enough data) |
 | `imu.record_to(path)` | start writing samples to csv |
 
-**filters** (`from macimu.filters import ...`)
+**filters** (`from macimu.filters import ...`) -- biquad butterworth, zero external deps
 
 | function | description |
 |----------|-------------|
 | `magnitude(x, y, z)` | euclidean magnitude |
-| `remove_gravity(samples, alpha)` | subtract slow-moving gravity estimate |
-| `high_pass(samples, cutoff_hz, rate)` | first-order iir high-pass |
-| `low_pass(samples, cutoff_hz, rate)` | first-order iir low-pass |
-| `bandpass(samples, low, high, rate)` | cascaded high + low pass |
+| `remove_gravity(samples, Q, R)` | kalman filter gravity subtraction |
+| `GravityKalman(Q, R)` | real-time gravity estimator (stateful) |
+| `low_pass(samples, cutoff_hz, rate, order=2)` | butterworth low-pass (-12 dB/oct per order of 2) |
+| `high_pass(samples, cutoff_hz, rate, order=2)` | butterworth high-pass |
+| `bandpass(samples, low, high, rate, order=2)` | cascaded hp + lp |
+| `filtfilt_low_pass(samples, cutoff_hz, rate)` | zero-phase lp (no lag, offline only) |
+| `filtfilt_high_pass(samples, cutoff_hz, rate)` | zero-phase hp (no lag, offline only) |
+| `median_filter(samples, window=5)` | spike / outlier removal |
+| `peak_detect(values, threshold, min_spacing)` | find peaks in 1d signal |
 | `rolling_rms(samples, window)` | rolling root-mean-square of magnitude |
 
 **exceptions**: `macimu.SensorNotFound` if no SPU device, `PermissionError` if not root
