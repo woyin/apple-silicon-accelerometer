@@ -7,6 +7,7 @@
 | **[Haptyk](https://haptyk.com)** | Free macOS app that turns your typing force into real mechanical keyboard sounds using the accelerometer |
 | [taigrr/spank](https://github.com/taigrr/spank) | Slap your MacBook, it yells back. Uses Apple Silicon accelerometer via IOKit HID |
 | [pirate/mac-hardware-toys](https://github.com/pirate/mac-hardware-toys) | Programmatically control Mac keyboard & display brightness, accelerometer data, fan speed, and more |
+| [Knock](https://www.tryknock.app/) | Turns taps on your MacBook into instant actions using the built-in accelerometer in Apple Silicon MacBooks |
 
 more information: [read the article on Medium](https://medium.com/@oli.bourbonnais/your-macbook-has-an-accelerometer-and-you-can-read-it-in-real-time-in-python-28d9395fb180)
 
